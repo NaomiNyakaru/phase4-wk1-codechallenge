@@ -7,14 +7,20 @@ function Home() {
   useEffect(() => {
     fetch("/heroes")
       .then((r) => r.json())
-      .then(setHeros);
+      .then((data) => {
+        console.log(data); // Check the response from the API
+        setHeros(data);
+      })
+      .catch((error) => {
+        console.error(error); // Check for errors in the API response
+      });
   }, []);
 
   return (
     <section>
       <h2>All Heroes</h2>
       <ul>
-        {heros.map((hero) => (
+        {Array.isArray(heros) && heros.map((hero) => (
           <li key={hero.id}>
             <Link to={`/heroes/${hero.id}`}>{hero.super_name}</Link>
           </li>

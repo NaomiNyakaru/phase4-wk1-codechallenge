@@ -17,7 +17,7 @@ class Hero(db.Model, SerializerMixin):
     name = db.Column(db.String)
     super_name = db.Column(db.String)
 
-    # Add relationship
+    
     hero_powers = db.relationship('HeroPower', back_populates='hero', cascade='all, delete-orphan')
 
     def to_dict(self):
@@ -25,7 +25,7 @@ class Hero(db.Model, SerializerMixin):
             "id": self.id,
             "name": self.name,
             "super_name": self.super_name,
-            "powers": [hp.power_id for hp in self.hero_powers]  # Include power IDs
+            "powers": [hp.power_id for hp in self.hero_powers] 
         }
 
     def __repr__(self):
@@ -58,7 +58,7 @@ class Power(db.Model, SerializerMixin):
             "id": self.id,
             "name": self.name,
             "description": self.description,
-            # You can include hero power relationships if needed
+           
         }
 
     def __repr__(self):
@@ -90,7 +90,7 @@ class HeroPower(db.Model, SerializerMixin):
             "strength": self.strength,
             "hero_id": self.hero_id,
             "power_id": self.power_id
-            # You can include additional information from related objects if needed
+           
         }
 
     def __repr__(self):

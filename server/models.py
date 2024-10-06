@@ -8,6 +8,7 @@ metadata = MetaData(naming_convention={
     "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
 })
 
+# initializing sqlAlchemy
 db = SQLAlchemy(metadata=metadata)
 
 class Hero(db.Model, SerializerMixin):
@@ -18,9 +19,10 @@ class Hero(db.Model, SerializerMixin):
     name = db.Column(db.String)
     super_name = db.Column(db.String)
 
-    
+    # relationship
     hero_powers = db.relationship('HeroPower', back_populates='hero', cascade='all, delete-orphan')
 
+    # method to serialize the object to a dictionary
     def to_dict(self):
         return {
             "id": self.id,
@@ -42,18 +44,21 @@ class Power(db.Model, SerializerMixin):
     # Add relationship
     hero_powers = db.relationship('HeroPower', back_populates='power', cascade='all, delete-orphan')
 
+    # powers name validation 
     @validates('name')
     def validate_name(self, key, name):
         if not name:
             raise ValueError("Power name cannot be empty.")
         return name
 
+    # powers description validation
     @validates('description')
     def validate_description(self, key, description):
         if not description or len(description) < 20:
             raise ValueError("Description must be present and at least 20 characters long.")
         return description
-
+    
+    # method to serialize the object to a dictionary
     def to_dict(self):
         return {
             "id": self.id,
@@ -70,20 +75,24 @@ class HeroPower(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     strength = db.Column(db.String, nullable=False)
-
+ 
+    # foreign key relations 
     hero_id = db.Column(db.Integer, db.ForeignKey('heroes.id'), nullable=False)
     power_id = db.Column(db.Integer, db.ForeignKey('powers.id'), nullable=False)
-
+    
+    # add relationships  
     hero = db.relationship('Hero', back_populates='hero_powers')
     power = db.relationship('Power', back_populates='hero_powers')
 
+    # validation for the strength level
     @validates('strength')
     def validate_strength(self, key, strength):
         valid_strengths = ['Strong', 'Weak', 'Average']
         if strength not in valid_strengths:
             raise ValueError(f"Strength must be one of: {', '.join(valid_strengths)}.")
         return strength
-
+    
+    # method to serialize the object to a dictionary
     def to_dict(self):
         return {
             "id": self.id,

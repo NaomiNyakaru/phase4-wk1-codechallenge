@@ -13,6 +13,7 @@ db = SQLAlchemy(metadata=metadata)
 class Hero(db.Model, SerializerMixin):
     __tablename__ = 'heroes'
 
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     super_name = db.Column(db.String)
@@ -70,7 +71,6 @@ class HeroPower(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     strength = db.Column(db.String, nullable=False)
 
-    # Add relationships
     hero_id = db.Column(db.Integer, db.ForeignKey('heroes.id'), nullable=False)
     power_id = db.Column(db.Integer, db.ForeignKey('powers.id'), nullable=False)
 

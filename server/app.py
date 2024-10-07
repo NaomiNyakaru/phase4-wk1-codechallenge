@@ -43,7 +43,6 @@ def get_heroes():
 
 # Route to get a specific hero by ID
 @app.route('/heroes/<int:id>', methods=['GET'])
-@app.route('/heroes/<int:id>', methods=['GET'])
 def get_hero(id):
     hero = Hero.query.get(id)
     if hero:
@@ -52,7 +51,7 @@ def get_hero(id):
         return make_response(json.dumps(hero_data), 200)
     else:
         return make_response(json.dumps({"error": "Hero not found"}), 404)
-        
+
 # Route to get all powers
 @app.route('/powers', methods=['GET'])
 def get_powers():
@@ -110,3 +109,4 @@ def create_hero_power():
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
+ 
